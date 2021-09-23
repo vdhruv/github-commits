@@ -8,6 +8,7 @@ use App\Models\Commit;
 use App\Models\Repository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class RepositoryController extends Controller
@@ -103,13 +104,15 @@ class RepositoryController extends Controller
                     break;
                 } else {
                     $this->storeCommit($repo, $commit);
+
+                    Mail::raw('New commit found in ' . $repo->full_name . 'repository', function ($message) {
+                        $message->to('test@user.com');
+                    });
                 }
             }
         }
 
-        return jsonResponse('Success', [
-            'repositories' => Repository::withCount('commits')->get()
-        ]);
+        return jsonResponse('Success');
     }
 
     /**
