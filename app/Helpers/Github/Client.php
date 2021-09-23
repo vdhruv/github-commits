@@ -7,17 +7,25 @@ use Illuminate\Support\Str;
 
 class Client
 {
-    const API_URL = 'https://api.github.com/repos/:user/:repo/commits';
+    const API_URL = 'https://api.github.com/repos/:owner/:repo';
 
-    public static function commits(string $user, string $repository)
+    public static function repository(string $owner, string $repository): \Illuminate\Support\Collection
     {
         $url = Str::of(self::API_URL)
-            ->replace(':user', $user)
+            ->replace(':owner', $owner)
             ->replace(':repo', $repository)
             ->lower();
 
-        $commits = Http::get($url)->collect();
+        return Http::get($url)->collect();
+    }
 
+    public static function commits(string $owner, string $repository): \Illuminate\Support\Collection
+    {
+        $url = Str::of(self::API_URL . '/commits?per_page=50')
+            ->replace(':owner', $owner)
+            ->replace(':repo', $repository)
+            ->lower();
 
+        return Http::get($url)->collect();
     }
 }

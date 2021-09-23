@@ -15,6 +15,12 @@ class CreateCommitsTable extends Migration
     {
         Schema::create('commits', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('repository_id')->constrained()->cascadeOnDelete();
+            $table->text('message');
+            $table->string('sha_hash');
+            $table->string('author');
+            $table->boolean('is_verified')->default(false);
+            $table->dateTime('committed_at');
             $table->timestamps();
         });
     }

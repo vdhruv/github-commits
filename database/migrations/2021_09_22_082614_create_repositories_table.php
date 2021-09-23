@@ -15,6 +15,13 @@ class CreateRepositoriesTable extends Migration
     {
         Schema::create('repositories', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('full_name');
+            $table->string('owner');
+            $table->text('description')->nullable();
+            $table->text('public_url');
+            $table->integer('watchers')->default(0);
+            $table->integer('forks')->default(0);
             $table->timestamps();
         });
     }
