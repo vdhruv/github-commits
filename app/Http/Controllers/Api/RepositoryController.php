@@ -97,6 +97,8 @@ class RepositoryController extends Controller
         foreach ($repos as $repo) {
             $commits = Client::commits($repo->owner, $repo->name);
             foreach ($commits as $commit) {
+                if (!$commit['sha']) break;
+
                 if ($repo->commits()->where('sha_hash', $commit['sha'])->exists()) {
                     break;
                 } else {
